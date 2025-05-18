@@ -13,8 +13,8 @@ import edu.br.ifpr.view.tablemodel.AuthorTableModel;
  */
 public class AuthorView extends javax.swing.JFrame {
 
-    AuthorTableModel authorTableModel = new AuthorTableModel();
-    AuthorController authorController = new AuthorController(authorTableModel);
+    private AuthorTableModel authorTableModel = new AuthorTableModel();
+    private AuthorController authorController = new AuthorController(authorTableModel);
 
     /**
      * Creates new form AuthorView

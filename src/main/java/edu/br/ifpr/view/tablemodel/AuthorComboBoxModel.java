@@ -13,7 +13,10 @@ import javax.swing.DefaultComboBoxModel;
  *
  * @author rafael
  */
-public class AuthorComboBoxModel extends DefaultComboBoxModel<Object> {
+public class AuthorComboBoxModel extends DefaultComboBoxModel<Author> {
+
+    private List<Author> authors;
+    private Author selectedAuthor;
 
     public AuthorComboBoxModel(List<Author> authors) {
         super();
@@ -23,5 +26,16 @@ public class AuthorComboBoxModel extends DefaultComboBoxModel<Object> {
             }
         }
     }
+
+    @Override
+    public Object getSelectedItem() {
+        return (Author) super.getSelectedItem();
+    }
+
+    @Override
+    public Author getElementAt(int index) {
+        return super.getElementAt(index);  }
+    
+    
 
 }

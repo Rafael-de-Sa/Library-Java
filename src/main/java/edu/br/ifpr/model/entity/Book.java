@@ -18,8 +18,7 @@ public class Book {
     public Book() {
     }
 
-    public Book(Integer book_id, String name, Integer pages, Author author) {
-        this.book_id = book_id;
+    public Book(String name, Integer pages, Author author) {
         this.name = name;
         this.pages = pages;
         this.author = author;
@@ -55,6 +54,10 @@ public class Book {
 
     public void setAuthor(Author author) {
         this.author = author;
+    }
+
+    public boolean isValidRegister() {
+        return this.name.matches("^[\\p{L}\\s.]+$") && this.name.length() <= 100;
     }
 
 }

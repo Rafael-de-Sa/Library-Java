@@ -38,11 +38,11 @@ public class Author {
 
     @Override
     public String toString() {
-        return "Author{" + "author_id=" + author_id + ", name=" + name + '}';
+        return author_id + " - " + name;
     }
 
     public boolean isValidRegister() {
-        return this.name.matches("^[\\p{L}\\s.]+$");
+        return this.name.matches("^[\\p{L}\\s.]+$") && this.name.length() <= 100;
     }
 
 }

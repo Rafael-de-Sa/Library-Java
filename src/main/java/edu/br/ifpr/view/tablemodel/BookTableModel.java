@@ -4,7 +4,7 @@
  */
 package edu.br.ifpr.view.tablemodel;
 
-import edu.br.ifpr.model.entity.Author;
+import edu.br.ifpr.model.entity.Book;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
@@ -13,29 +13,28 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author rafael
  */
-public class AuthorTableModel extends AbstractTableModel {
+public class BookTableModel extends AbstractTableModel {
 
-    private List<Author> data = new LinkedList<Author>();
+    private List<Book> data = new LinkedList<Book>();
+    private String[] columns = {"ID", "Nome", "Páginas", "Autor"};
 
-    private String[] columns = {"ID", "Nome"};
-
-    public AuthorTableModel() {
+    public BookTableModel() {
     }
 
-    public List<Author> getData() {
+    public List<Book> getData() {
         return data;
     }
 
-    public void setData(List<Author> data) {
+    public void setData(List<Book> data) {
         this.data = data;
     }
 
-    public Author get(int row) {
+    public Book get(int row) {
         return data.get(row);
     }
 
-    public void add(Author a) {
-        this.data.add(a);
+    public void add(Book b) {
+        this.data.add(b);
         this.fireTableDataChanged();
     }
 
@@ -61,13 +60,18 @@ public class AuthorTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        Author author = data.get(rowIndex);
+        Book book = data.get(rowIndex);
 
         switch (columnIndex) {
             case 0:
-                return author.getAuthor_id();
+                return book.getBook_id();
             case 1:
-                return author.getName();
+                return book.getName();
+            case 2:
+                return book.getPages();
+            case 3:
+                return book.getAuthor().getName();
+
             default:
                 return null;
         }

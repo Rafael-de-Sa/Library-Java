@@ -5,7 +5,10 @@
 package edu.br.ifpr.view;
 
 import edu.br.ifpr.controller.AuthorController;
+import edu.br.ifpr.controller.BookController;
+import edu.br.ifpr.model.entity.Author;
 import edu.br.ifpr.view.tablemodel.AuthorComboBoxModel;
+import edu.br.ifpr.view.tablemodel.BookTableModel;
 
 /**
  *
@@ -16,13 +19,22 @@ public class BookView extends javax.swing.JFrame {
     /**
      * Creates new form BookView
      */
+    private AuthorController authorController;
+    private AuthorComboBoxModel authorComboBoxModel;
+    private BookTableModel bookTableModel = new BookTableModel();
+    private BookController bookController = new BookController(bookTableModel);
+    
     public BookView() {
-
-        AuthorController authorController = new AuthorController();
-        AuthorComboBoxModel authorComboBoxModel = new AuthorComboBoxModel(authorController.dataComboBoxModel());
-
+        
+        authorController = new AuthorController();
+        authorComboBoxModel = new AuthorComboBoxModel(authorController.dataComboBoxModel());
+        
         initComponents();
         this.setTitle("Cadastro de Livro");
+        cbAuthor.setModel(authorComboBoxModel);
+        tblBook.setModel(bookTableModel);
+        bookController.setDataTableModel();
+        
     }
 
     /**
@@ -155,6 +167,11 @@ public class BookView extends javax.swing.JFrame {
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
         // TODO add your handling code here:
+        String name = tfName.getText().trim();
+        Integer pages = (Integer) spnPages.getValue();
+        Author author = (Author) cbAuthor.getSelectedItem();
+        
+        bookController.registerBook(name, pages, author);
     }//GEN-LAST:event_btnRegisterActionPerformed
 
     /**
@@ -194,7 +211,7 @@ public class BookView extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnRegister;
-    private javax.swing.JComboBox<String> cbAuthor;
+    private javax.swing.JComboBox<Author> cbAuthor;
     private javax.swing.JLabel lblAuthor;
     private javax.swing.JLabel lblId;
     private javax.swing.JLabel lblName;
