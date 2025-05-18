@@ -7,6 +7,7 @@ package edu.br.ifpr.controller;
 import edu.br.ifpr.dao.AuthorDao;
 import edu.br.ifpr.model.entity.Author;
 import edu.br.ifpr.view.AuthorView;
+import edu.br.ifpr.view.tablemodel.AuthorComboBoxModel;
 import edu.br.ifpr.view.tablemodel.AuthorTableModel;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -20,12 +21,19 @@ public class AuthorController {
     private AuthorTableModel authorTableModel;
     private AuthorDao authorDao = new AuthorDao();
 
+    public AuthorController() {
+    }
+
     public AuthorController(AuthorTableModel authorTableModel) {
         this.authorTableModel = authorTableModel;
     }
 
     public void setDataTableModel() {
         authorTableModel.setData(authorDao.findAll());
+    }
+
+    public List<Author> dataComboBoxModel() {
+        return authorDao.findAll();
     }
 
     public void registerAuthor(String name) {
