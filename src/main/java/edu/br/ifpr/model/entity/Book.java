@@ -57,7 +57,9 @@ public class Book {
     }
 
     public boolean isValidRegister() {
-        return this.name.matches("^[\\p{L}\\s.]+$") && this.name.length() <= 100;
+        return this.name.matches("^[\\p{L}\\s.0-9]+$")
+                && this.name.length() <= 100
+                && this.pages > 0;
     }
 
 }

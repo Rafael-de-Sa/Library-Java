@@ -34,14 +34,16 @@ public class AuthorController {
         return authorDao.findAll();
     }
 
-    public void registerAuthor(String name) {
+    public boolean registerAuthor(String name) {
         Author author = new Author(name);
 
         if (author.isValidRegister()) {
             authorDao.create(author);
             authorTableModel.add(author);
+            return true;
         } else {
             JOptionPane.showMessageDialog(null, "Verifique os dados cadastrados!");
+            return false;
         }
 
     }

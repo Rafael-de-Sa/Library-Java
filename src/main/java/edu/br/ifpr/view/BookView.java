@@ -23,18 +23,18 @@ public class BookView extends javax.swing.JFrame {
     private AuthorComboBoxModel authorComboBoxModel;
     private BookTableModel bookTableModel = new BookTableModel();
     private BookController bookController = new BookController(bookTableModel);
-    
+
     public BookView() {
-        
+
         authorController = new AuthorController();
         authorComboBoxModel = new AuthorComboBoxModel(authorController.dataComboBoxModel());
-        
+
         initComponents();
         this.setTitle("Cadastro de Livro");
         cbAuthor.setModel(authorComboBoxModel);
         tblBook.setModel(bookTableModel);
         bookController.setDataTableModel();
-        
+
     }
 
     /**
@@ -126,7 +126,7 @@ public class BookView extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblAuthor)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbAuthor, 0, 193, Short.MAX_VALUE))
+                        .addComponent(cbAuthor, 0, 293, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btnRegister)
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -170,9 +170,17 @@ public class BookView extends javax.swing.JFrame {
         String name = tfName.getText().trim();
         Integer pages = (Integer) spnPages.getValue();
         Author author = (Author) cbAuthor.getSelectedItem();
-        
-        bookController.registerBook(name, pages, author);
+
+        if (bookController.registerBook(name, pages, author)) {
+            this.clearFields();
+        }
     }//GEN-LAST:event_btnRegisterActionPerformed
+
+    private void clearFields() {
+        tfId.setText("");
+        tfName.setText("");
+        spnPages.setValue(0);
+    }
 
     /**
      * @param args the command line arguments

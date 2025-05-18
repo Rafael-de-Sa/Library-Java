@@ -38,14 +38,16 @@ public class BookController {
         this.bookTableModel = bookTableModel;
     }
 
-    public void registerBook(String name, Integer pages, Author author) {
+    public boolean registerBook(String name, Integer pages, Author author) {
         Book book = new Book(name, pages, author);
 
         if (book.isValidRegister()) {
             bookDao.create(book);
             bookTableModel.add(book);
+            return true;
         } else {
             JOptionPane.showMessageDialog(null, "Verifique os dados cadastrados!");
+            return false;
         }
 
     }

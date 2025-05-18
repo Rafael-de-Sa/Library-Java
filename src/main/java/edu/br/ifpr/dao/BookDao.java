@@ -58,19 +58,20 @@ public class BookDao implements Dao<Integer, Book> {
         String sql = "SELECT * FROM books "
                 + "WHERE book_id = ?";
         Book book = null;
-        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);) {
-
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, id);
 
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    book = new Book();
-                    book.setBook_id(rs.getInt("book_id"));
-                    book.setName(rs.getString("name"));
-                    book.setPages(rs.getInt("pages"));
-                    book.setAuthor(authorDao.retrive(rs.getInt("author_id")));
-                }
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                book = new Book();
+                book.setBook_id(rs.getInt("book_id"));
+                book.setName(rs.getString("name"));
+                book.setPages(rs.getInt("pages"));
+                book.setAuthor(authorDao.retrive(rs.getInt("author_id")));
             }
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -123,13 +124,19 @@ public class BookDao implements Dao<Integer, Book> {
         String sql = "SELECT * FROM books";
         List<Book> books = new LinkedList<>();
 
-        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql); ResultSet rs = pstmt.executeQuery();) {
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 Book book = new Book();
                 book.setBook_id(rs.getInt("book_id"));
                 book.setName(rs.getString("name"));
                 book.setPages(rs.getInt("pages"));
-                book.setAuthor(authorDao.retrive(rs.getInt("author_id")));
+
+                Integer author_id = (Integer) rs.getInt("author_id");
+
+                book.setAuthor(authorDao.retrive(author_id));
 
                 books.add(book);
             }

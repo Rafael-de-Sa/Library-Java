@@ -49,11 +49,12 @@ public class AuthorDao implements Dao<Integer, Author> {
 
     @Override
     public Author retrive(Integer id) {
-        String sql = "SELECT * FROM author "
+        String sql = "SELECT * FROM authors "
                 + "WHERE author_id = ?";
         Author author = null;
-        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);) {
-
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, id);
 
             try (ResultSet rs = pstmt.executeQuery()) {
@@ -117,7 +118,10 @@ public class AuthorDao implements Dao<Integer, Author> {
         String sql = "SELECT * FROM authors";
         List<Author> authors = new LinkedList<>();
 
-        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql); ResultSet rs = pstmt.executeQuery()) {
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
                 Author author = new Author();

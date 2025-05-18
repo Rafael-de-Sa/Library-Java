@@ -12,7 +12,7 @@ import edu.br.ifpr.view.tablemodel.AuthorTableModel;
  * @author rafael
  */
 public class AuthorView extends javax.swing.JFrame {
-
+    
     private AuthorTableModel authorTableModel = new AuthorTableModel();
     private AuthorController authorController = new AuthorController(authorTableModel);
 
@@ -128,9 +128,17 @@ public class AuthorView extends javax.swing.JFrame {
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
         // TODO add your handling code here:
         String name = tfName.getText().trim();
+        
+        if (authorController.registerAuthor(name)) {
+            this.clearFields();
+        }
 
-        authorController.registerAuthor(name);
     }//GEN-LAST:event_btnRegisterActionPerformed
+    
+    private void clearFields() {
+        tfId.setText("");
+        tfName.setText("");
+    }
 
     /**
      * @param args the command line arguments
