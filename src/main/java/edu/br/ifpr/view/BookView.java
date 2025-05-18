@@ -4,6 +4,9 @@
  */
 package edu.br.ifpr.view;
 
+import edu.br.ifpr.controller.AuthorController;
+import edu.br.ifpr.view.tablemodel.AuthorComboBoxModel;
+
 /**
  *
  * @author rafael
@@ -14,7 +17,12 @@ public class BookView extends javax.swing.JFrame {
      * Creates new form BookView
      */
     public BookView() {
+
+        AuthorController authorController = new AuthorController();
+        AuthorComboBoxModel authorComboBoxModel = new AuthorComboBoxModel(authorController.dataComboBoxModel());
+
         initComponents();
+        this.setTitle("Cadastro de Livro");
     }
 
     /**
@@ -42,6 +50,10 @@ public class BookView extends javax.swing.JFrame {
 
         lblId.setText("ID:");
 
+        tfId.setEditable(false);
+        tfId.setEnabled(false);
+        tfId.setFocusable(false);
+
         lblName.setText("Nome:");
 
         lblPages.setText("Páginas:");
@@ -60,6 +72,11 @@ public class BookView extends javax.swing.JFrame {
         });
 
         btnRegister.setText("Cadastrar");
+        btnRegister.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegisterActionPerformed(evt);
+            }
+        });
 
         tblBook.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -135,6 +152,10 @@ public class BookView extends javax.swing.JFrame {
     private void cbAuthorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbAuthorActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_cbAuthorActionPerformed
+
+    private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnRegisterActionPerformed
 
     /**
      * @param args the command line arguments
