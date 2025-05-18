@@ -10,7 +10,7 @@ package edu.br.ifpr.model.entity;
  */
 public class Author {
 
-    private int author_id;
+    private Integer author_id;
     private String name;
 
     public Author() {
@@ -20,11 +20,11 @@ public class Author {
         this.name = name;
     }
 
-    public int getAuthor_id() {
+    public Integer getAuthor_id() {
         return author_id;
     }
 
-    public void setAuthor_id(int author_id) {
+    public void setAuthor_id(Integer author_id) {
         this.author_id = author_id;
     }
 
