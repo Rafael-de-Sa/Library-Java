@@ -4,12 +4,11 @@
  */
 package edu.br.ifpr.dao;
 
-import edu.br.ifpr.model.entity.Author;
+import edu.br.ifpr.model.entity.Book;
 import edu.br.ifpr.util.DatabaseConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -18,85 +17,92 @@ import javax.swing.JOptionPane;
  *
  * @author rafael
  */
-public class AuthorDao implements Dao<Integer, Author> {
+public class BookDao implements Dao<Integer, Book> {
+
+    public AuthorDao authorDao = new AuthorDao();
 
     @Override
-    public void create(Author entity) {
-        String sql = "INSERT INTO authors (name) "
-                + "VALUES (?)";
-        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);) {
+    public void create(Book entity) {
+        String sql = "INSERT INTO books (name, pages, author_id) "
+                + "VALUES (?, ?, ?)";
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql, java.sql.Statement.RETURN_GENERATED_KEYS);) {
             pstmt.setString(1, entity.getName());
+            pstmt.setInt(2, entity.getPages());
+            pstmt.setInt(3, entity.getAuthor().getAuthor_id());
 
             pstmt.executeUpdate();
 
             try (ResultSet rs = pstmt.getGeneratedKeys();) {
                 if (rs.next()) {
                     Integer id = rs.getInt(1);
-                    entity.setAuthor_id(id);
+                    entity.setBook_id(id);
                 }
             }
+
         } catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erro ao cadastrar, verifique o log!");
         }
 
-        String msg = "Author cadastrado!\n"
-                + "Id: " + entity.getAuthor_id() + "\n"
-                + "Nome: " + entity.getName();
+        String msg = "Livro cadastrado!\n"
+                + "Id: " + entity.getBook_id() + "\n"
+                + "Nome: " + entity.getName() + "\n"
+                + "Páginas: " + entity.getPages() + "\n"
+                + "Autor: " + entity.getAuthor().getName();
 
         JOptionPane.showMessageDialog(null, msg);
     }
 
     @Override
-    public Author retrive(Integer id) {
-        String sql = "SELECT * FROM author "
-                + "WHERE author_id = ?";
-        Author author = null;
+    public Book retrive(Integer id) {
+        String sql = "SELECT * FROM books "
+                + "WHERE book_id = ?";
+        Book book = null;
         try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);) {
 
             pstmt.setInt(1, id);
 
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    author = new Author();
-                    author.setAuthor_id(rs.getInt("author_id"));
-                    author.setName(rs.getString("name"));
+                    book = new Book();
+                    book.setBook_id(rs.getInt("book_id"));
+                    book.setName(rs.getString("name"));
+                    book.setPages(rs.getInt("pages"));
+                    book.setAuthor(authorDao.retrive(rs.getInt("author_id")));
                 }
             }
-
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return author;
+        return book;
     }
 
     @Override
-    public void update(Author entity) {
-        String sql = "UPDATE authors SET name = ? "
-                + "WHERE author_id = ?";
+    public void update(Book entity) {
+        String sql = "UPDATE books "
+                + "SET name = ?, pages = ?, author_id = ? "
+                + "WHERE = book_id = ?";
+
         try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);) {
             pstmt.setString(1, entity.getName());
-            pstmt.setInt(2, entity.getAuthor_id());
+            pstmt.setInt(2, entity.getPages());
+            pstmt.setInt(3, entity.getAuthor().getAuthor_id());
+            pstmt.setInt(4, entity.getBook_id());
 
             pstmt.executeUpdate();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+
     }
 
     @Override
     public void delete(Integer id) {
-        String sql = "DELETE FROM authors "
-                + "WHERE author_id = ? "
-                + "AND NOT EXISTS("
-                + "SELECT 1 "
-                + "FROM books"
-                + "WHERE author_id = ?)";
+        String sql = "DELETE FROM books "
+                + "WHERE book_id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);) {
-
             pstmt.setInt(1, id);
-            pstmt.setInt(2, id);
 
             int rowsAffected = pstmt.executeUpdate();
 
@@ -113,24 +119,25 @@ public class AuthorDao implements Dao<Integer, Author> {
     }
 
     @Override
-    public List<Author> findAll() {
-        String sql = "SELECT * FROM authors";
-        List<Author> authors = new LinkedList<>();
+    public List<Book> findAll() {
+        String sql = "SELECT * FROM books";
+        List<Book> books = new LinkedList<>();
 
-        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql); ResultSet rs = pstmt.executeQuery()) {
-
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql); ResultSet rs = pstmt.executeQuery();) {
             while (rs.next()) {
-                Author author = new Author();
-                author.setAuthor_id(rs.getInt("author_id"));
-                author.setName(rs.getString("name"));
+                Book book = new Book();
+                book.setBook_id(rs.getInt("book_id"));
+                book.setName(rs.getString("name"));
+                book.setPages(rs.getInt("pages"));
+                book.setAuthor(authorDao.retrive(rs.getInt("author_id")));
 
-                authors.add(author);
+                books.add(book);
             }
 
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return authors;
+        return books;
     }
 
 }

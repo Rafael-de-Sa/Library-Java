@@ -11,13 +11,16 @@ package edu.br.ifpr.model.entity;
 public class Book {
 
     private Integer book_id;
+    private String name;
     private Integer pages;
     private Author author;
 
     public Book() {
     }
 
-    public Book(Integer pages, Author author) {
+    public Book(Integer book_id, String name, Integer pages, Author author) {
+        this.book_id = book_id;
+        this.name = name;
         this.pages = pages;
         this.author = author;
     }
@@ -28,6 +31,14 @@ public class Book {
 
     public void setBook_id(Integer book_id) {
         this.book_id = book_id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Integer getPages() {
