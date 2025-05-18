@@ -9,6 +9,7 @@ import edu.br.ifpr.model.entity.Author;
 import edu.br.ifpr.view.AuthorView;
 import edu.br.ifpr.view.tablemodel.AuthorTableModel;
 import java.util.List;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -29,9 +30,14 @@ public class AuthorController {
 
     public void registerAuthor(String name) {
         Author author = new Author(name);
-        author = authorDao.create(author);
 
-        authorTableModel.add(author);
+        if (author.isValidRegister()) {
+            author = authorDao.create(author);
+            authorTableModel.add(author);
+        } else {
+            JOptionPane.showMessageDialog(null, "Verifique os dados cadastrados!");
+        }
+
     }
 
 }

@@ -41,4 +41,8 @@ public class Author {
         return "Author{" + "author_id=" + author_id + ", name=" + name + '}';
     }
 
+    public boolean isValidRegister() {
+        return this.name.matches("^[\\p{L}\\s.]+$");
+    }
+
 }
