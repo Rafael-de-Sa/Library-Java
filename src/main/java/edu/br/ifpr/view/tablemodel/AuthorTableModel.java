@@ -4,6 +4,7 @@
  */
 package edu.br.ifpr.view.tablemodel;
 
+import edu.br.ifpr.controller.AuthorController;
 import edu.br.ifpr.model.entity.Author;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,7 +16,8 @@ import javax.swing.table.AbstractTableModel;
  */
 public class AuthorTableModel extends AbstractTableModel {
 
-    private List<Author> data = new LinkedList<>();
+    private AuthorController authorController = new AuthorController();
+    private List<Author> data = new LinkedList<>(authorController.setDataTableModel());
 
     private String[] columns = {"ID", "Nome"};
 
@@ -56,9 +58,9 @@ public class AuthorTableModel extends AbstractTableModel {
         Author author = data.get(rowIndex);
 
         switch (columnIndex) {
-            case 1:
+            case 0:
                 return author.getAuthor_id();
-            case 2:
+            case 1:
                 return author.getName();
             default:
                 return null;
