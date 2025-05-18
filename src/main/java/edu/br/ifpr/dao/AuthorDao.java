@@ -24,7 +24,7 @@ import javax.swing.JOptionPane;
 public class AuthorDao implements Dao<Integer, Author> {
 
     @Override
-    public void create(Author entity) {
+    public Author create(Author entity) {
         String sql = "INSERT INTO authors (name) "
                 + "VALUES (?)";
         try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);) {
@@ -48,6 +48,7 @@ public class AuthorDao implements Dao<Integer, Author> {
                 + "Nome: " + entity.getName();
 
         JOptionPane.showMessageDialog(null, msg);
+        return entity;
     }
 
     @Override

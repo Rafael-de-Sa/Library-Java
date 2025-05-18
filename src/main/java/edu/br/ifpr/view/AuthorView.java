@@ -4,6 +4,7 @@
  */
 package edu.br.ifpr.view;
 
+import edu.br.ifpr.controller.AuthorController;
 import edu.br.ifpr.view.tablemodel.AuthorTableModel;
 
 /**
@@ -13,6 +14,7 @@ import edu.br.ifpr.view.tablemodel.AuthorTableModel;
 public class AuthorView extends javax.swing.JFrame {
 
     AuthorTableModel authorTableModel = new AuthorTableModel();
+    AuthorController authorController = new AuthorController(authorTableModel);
 
     /**
      * Creates new form AuthorView
@@ -21,6 +23,7 @@ public class AuthorView extends javax.swing.JFrame {
         initComponents();
         this.setTitle("Cadastro de Autor");
         tblAuthor.setModel(authorTableModel);
+        authorController.setDataTableModel();
     }
 
     /**
@@ -58,6 +61,11 @@ public class AuthorView extends javax.swing.JFrame {
         lblName.setText("Nome:");
 
         btnRegister.setText("Cadastrar");
+        btnRegister.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRegisterActionPerformed(evt);
+            }
+        });
 
         tblAuthor.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -116,6 +124,13 @@ public class AuthorView extends javax.swing.JFrame {
     private void tfIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfIdActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_tfIdActionPerformed
+
+    private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
+        // TODO add your handling code here:
+        String name = tfName.getText();
+
+        authorController.registerAuthor(name);
+    }//GEN-LAST:event_btnRegisterActionPerformed
 
     /**
      * @param args the command line arguments

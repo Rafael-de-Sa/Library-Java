@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface Dao<PK, T> {
 
-    public void create(T entity);
+    public T create(T entity);
 
     public T retrive(PK id);
 

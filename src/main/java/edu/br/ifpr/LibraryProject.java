@@ -11,13 +11,12 @@ import edu.br.ifpr.model.entity.Author;
  * @author rafael
  */
 public class LibraryProject {
-    
+
     public static void main(String[] args) {
-        
-        Author author = new Author("Clarice Lispector");
+
+        /*Author author = new Author("Clarice Lispector");
         AuthorDao authorDao = new AuthorDao();
         
-        authorDao.create(author);
-        
+        authorDao.create(author);*/
     }
 }
