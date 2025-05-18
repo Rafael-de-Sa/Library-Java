@@ -32,7 +32,7 @@ public class AuthorController {
         Author author = new Author(name);
 
         if (author.isValidRegister()) {
-            author = authorDao.create(author);
+            authorDao.create(author);
             authorTableModel.add(author);
         } else {
             JOptionPane.showMessageDialog(null, "Verifique os dados cadastrados!");

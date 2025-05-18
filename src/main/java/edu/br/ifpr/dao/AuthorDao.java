@@ -9,12 +9,9 @@ import edu.br.ifpr.util.DatabaseConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -24,7 +21,7 @@ import javax.swing.JOptionPane;
 public class AuthorDao implements Dao<Integer, Author> {
 
     @Override
-    public Author create(Author entity) {
+    public void create(Author entity) {
         String sql = "INSERT INTO authors (name) "
                 + "VALUES (?)";
         try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);) {
@@ -48,22 +45,70 @@ public class AuthorDao implements Dao<Integer, Author> {
                 + "Nome: " + entity.getName();
 
         JOptionPane.showMessageDialog(null, msg);
-        return entity;
     }
 
     @Override
     public Author retrive(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String sql = "SELECT * FROM author "
+                + "WHERE author_id = ?";
+        Author author = null;
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);) {
+
+            pstmt.setInt(1, id);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    author = new Author();
+                    author.setAuthor_id(rs.getInt("author_id"));
+                    author.setName(rs.getString("name"));
+                }
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return author;
     }
 
     @Override
     public void update(Author entity) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String sql = "UPDATE authors SET name = ? "
+                + "WHERE author_id = ?";
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);) {
+            pstmt.setString(1, entity.getName());
+
+            pstmt.executeUpdate();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     @Override
     public void delete(Integer id) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String sql = "DELETE FROM authors "
+                + "WHERE author_id = ? "
+                + "AND NOT EXISTS("
+                + "SELECT 1 "
+                + "FROM books"
+                + "WHERE author_id = ?)";
+
+        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);) {
+
+            pstmt.setInt(1, id);
+            pstmt.setInt(2, id);
+
+            int rowsAffected = pstmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                JOptionPane.showMessageDialog(null, "Autor deletado com sucesso!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Não foi possível deletar o autor, pois o mesmo possui livros associados!");
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
     }
 
     @Override

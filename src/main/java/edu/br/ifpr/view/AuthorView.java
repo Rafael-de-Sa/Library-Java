@@ -127,7 +127,7 @@ public class AuthorView extends javax.swing.JFrame {
 
     private void btnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegisterActionPerformed
         // TODO add your handling code here:
-        String name = tfName.getText();
+        String name = tfName.getText().trim();
 
         authorController.registerAuthor(name);
     }//GEN-LAST:event_btnRegisterActionPerformed
