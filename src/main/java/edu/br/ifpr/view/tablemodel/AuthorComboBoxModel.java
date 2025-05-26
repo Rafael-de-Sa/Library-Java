@@ -15,9 +15,6 @@ import javax.swing.DefaultComboBoxModel;
  */
 public class AuthorComboBoxModel extends DefaultComboBoxModel<Author> {
 
-    private List<Author> authors;
-    private Author selectedAuthor;
-
     public AuthorComboBoxModel(List<Author> authors) {
         super();
         if (authors != null) {
@@ -34,8 +31,7 @@ public class AuthorComboBoxModel extends DefaultComboBoxModel<Author> {
 
     @Override
     public Author getElementAt(int index) {
-        return super.getElementAt(index);  }
-    
-    
+        return super.getElementAt(index);
+    }
 
 }

@@ -7,6 +7,7 @@ package edu.br.ifpr.view.tablemodel;
 import edu.br.ifpr.model.entity.Author;
 import java.util.LinkedList;
 import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.AbstractTableModel;
 
 /**
@@ -42,6 +43,22 @@ public class AuthorTableModel extends AbstractTableModel {
     public void remove(int row) {
         data.remove(row);
         this.fireTableDataChanged();
+    }
+
+    public int getRowIndexById(Integer authorId) {
+        for (int i = 0; i < data.size(); i++) {
+            if (data.get(i).getAuthor_id() == authorId) {
+                return i;
+            }
+        }
+        JOptionPane.showMessageDialog(null, "Erro ao atualizar tabela!", "Erro", JOptionPane.ERROR_MESSAGE);
+        return -1;
+    }
+
+    public void updateRow(Author author) {
+        int row = getRowIndexById(author.getAuthor_id());
+        this.data.set(row, author);
+        fireTableRowsUpdated(row, row);
     }
 
     @Override

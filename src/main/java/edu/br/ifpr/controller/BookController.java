@@ -52,4 +52,33 @@ public class BookController {
 
     }
 
+    public void removeBook(Integer row) {
+        Book book = bookTableModel.get(row);
+        if (bookDao.delete(book.getBook_id())) {
+            bookTableModel.remove(row);
+        }
+    }
+
+    public Book bookRetrieve(Integer row) {
+        return bookTableModel.get(row);
+    }
+
+    public boolean bookUpdate(Integer id, String name, Integer pages, Author author) {
+        Book book = new Book();
+        book.setBook_id(id);
+        book.setName(name);
+        book.setPages(pages);
+        book.setAuthor(author);
+
+        if (book.isValidRegister()) {
+            bookDao.update(book);
+            bookTableModel.updateRow(book);
+            return true;
+        } else {
+            JOptionPane.showMessageDialog(null, "Verifique os dados cadastrados!");
+            return false;
+        }
+
+    }
+
 }

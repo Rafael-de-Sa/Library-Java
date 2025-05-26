@@ -18,7 +18,7 @@ public interface Dao<PK, T> {
 
     public void update(T entity);
 
-    public void delete(PK id);
+    public boolean delete(PK id);
 
     public List<T> findAll();
 }

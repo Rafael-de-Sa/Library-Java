@@ -4,6 +4,8 @@
  */
 package edu.br.ifpr.model.entity;
 
+import java.util.Objects;
+
 /**
  *
  * @author rafael
@@ -45,4 +47,14 @@ public class Author {
         return this.name.matches("^[\\p{L}\\s.]+$") && this.name.length() <= 100;
     }
 
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Author author = (Author) obj;
+        return Objects.equals(author_id, author.author_id);
+    }
 }

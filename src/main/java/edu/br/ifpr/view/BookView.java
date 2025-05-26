@@ -7,8 +7,10 @@ package edu.br.ifpr.view;
 import edu.br.ifpr.controller.AuthorController;
 import edu.br.ifpr.controller.BookController;
 import edu.br.ifpr.model.entity.Author;
+import edu.br.ifpr.model.entity.Book;
 import edu.br.ifpr.view.tablemodel.AuthorComboBoxModel;
 import edu.br.ifpr.view.tablemodel.BookTableModel;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -23,18 +25,19 @@ public class BookView extends javax.swing.JFrame {
     private AuthorComboBoxModel authorComboBoxModel;
     private BookTableModel bookTableModel = new BookTableModel();
     private BookController bookController = new BookController(bookTableModel);
-
+    
     public BookView() {
-
+        
         authorController = new AuthorController();
         authorComboBoxModel = new AuthorComboBoxModel(authorController.dataComboBoxModel());
-
+        
         initComponents();
         this.setTitle("Cadastro de Livro");
+        this.setLocationRelativeTo(null);
         cbAuthor.setModel(authorComboBoxModel);
         tblBook.setModel(bookTableModel);
         bookController.setDataTableModel();
-
+        
     }
 
     /**
@@ -55,10 +58,14 @@ public class BookView extends javax.swing.JFrame {
         lblAuthor = new javax.swing.JLabel();
         cbAuthor = new javax.swing.JComboBox<>();
         btnRegister = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
+        btnSave = new javax.swing.JButton();
+        btnCancel = new javax.swing.JButton();
+        btnRemove = new javax.swing.JButton();
         spBookTable = new javax.swing.JScrollPane();
         tblBook = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         lblId.setText("ID:");
 
@@ -90,6 +97,35 @@ public class BookView extends javax.swing.JFrame {
             }
         });
 
+        btnUpdate.setText("Alterar");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
+
+        btnSave.setText("Salvar");
+        btnSave.setEnabled(false);
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
+
+        btnCancel.setText("Cancelar");
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
+
+        btnRemove.setText("Remover");
+        btnRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveActionPerformed(evt);
+            }
+        });
+
         tblBook.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -110,7 +146,6 @@ public class BookView extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(spBookTable, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(lblId)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -119,19 +154,30 @@ public class BookView extends javax.swing.JFrame {
                         .addComponent(lblName)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(tfName))
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(lblPages)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(spnPages, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(lblAuthor)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(cbAuthor, 0, 293, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnRegister)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addComponent(cbAuthor, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(spBookTable)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnRegister, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
+
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btnCancel, btnRegister, btnRemove, btnSave, btnUpdate});
+
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
@@ -148,7 +194,12 @@ public class BookView extends javax.swing.JFrame {
                     .addComponent(lblAuthor)
                     .addComponent(cbAuthor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnRegister)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnRegister)
+                    .addComponent(btnRemove)
+                    .addComponent(btnUpdate)
+                    .addComponent(btnSave)
+                    .addComponent(btnCancel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(spBookTable, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
                 .addContainerGap())
@@ -170,16 +221,62 @@ public class BookView extends javax.swing.JFrame {
         String name = tfName.getText().trim();
         Integer pages = (Integer) spnPages.getValue();
         Author author = (Author) cbAuthor.getSelectedItem();
-
+        
         if (bookController.registerBook(name, pages, author)) {
             this.clearFields();
         }
     }//GEN-LAST:event_btnRegisterActionPerformed
 
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        // TODO add your handling code here:
+        if (tblBook.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(null, "Nenhuma linha selecionada!");
+        } else {
+            btnRegister.setEnabled(false);
+            btnSave.setEnabled(true);
+            Book book = bookController.bookRetrieve(tblBook.getSelectedRow());
+            this.tfId.setText(String.valueOf(book.getBook_id()));
+            this.tfName.setText(book.getName());
+            this.spnPages.setValue(book.getPages());
+            this.cbAuthor.setSelectedItem(book.getAuthor());
+        }
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        // TODO add your handling code here:
+        Integer id = Integer.parseInt(tfId.getText());
+        String name = tfName.getText().trim();
+        Integer pages = (Integer) spnPages.getValue();
+        Author author = (Author) cbAuthor.getSelectedItem();
+        
+        if (bookController.bookUpdate(id, name, pages, author)) {
+            this.clearFields();
+        }
+    }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+        // TODO add your handling code here:
+        this.clearFields();
+    }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void btnRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveActionPerformed
+        // TODO add your handling code here:
+        int row = tblBook.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(null, "Nenhuma linha selecionada");
+        } else {
+            bookController.removeBook(row);
+            this.clearFields();
+        }
+    }//GEN-LAST:event_btnRemoveActionPerformed
+    
     private void clearFields() {
         tfId.setText("");
         tfName.setText("");
         spnPages.setValue(0);
+        btnRegister.setEnabled(true);
+        btnSave.setEnabled(false);
+        cbAuthor.setSelectedIndex(0);
     }
 
     /**
@@ -218,7 +315,11 @@ public class BookView extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnRegister;
+    private javax.swing.JButton btnRemove;
+    private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnUpdate;
     private javax.swing.JComboBox<Author> cbAuthor;
     private javax.swing.JLabel lblAuthor;
     private javax.swing.JLabel lblId;

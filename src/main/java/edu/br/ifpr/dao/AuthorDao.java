@@ -24,17 +24,19 @@ public class AuthorDao implements Dao<Integer, Author> {
     public void create(Author entity) {
         String sql = "INSERT INTO authors (name) "
                 + "VALUES (?)";
-        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);) {
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             pstmt.setString(1, entity.getName());
 
             pstmt.executeUpdate();
 
-            try (ResultSet rs = pstmt.getGeneratedKeys();) {
-                if (rs.next()) {
-                    Integer id = rs.getInt(1);
-                    entity.setAuthor_id(id);
-                }
+            ResultSet rs = pstmt.getGeneratedKeys();
+            if (rs.next()) {
+                Integer id = rs.getInt(1);
+                entity.setAuthor_id(id);
             }
+
         } catch (Exception ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(null, "Erro ao cadastrar, verifique o log!");
@@ -57,12 +59,12 @@ public class AuthorDao implements Dao<Integer, Author> {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, id);
 
-            try (ResultSet rs = pstmt.executeQuery()) {
-                if (rs.next()) {
-                    author = new Author();
-                    author.setAuthor_id(rs.getInt("author_id"));
-                    author.setName(rs.getString("name"));
-                }
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                author = new Author();
+                author.setAuthor_id(rs.getInt("author_id"));
+                author.setName(rs.getString("name"));
             }
 
         } catch (Exception ex) {
@@ -75,7 +77,9 @@ public class AuthorDao implements Dao<Integer, Author> {
     public void update(Author entity) {
         String sql = "UPDATE authors SET name = ? "
                 + "WHERE author_id = ?";
-        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);) {
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, entity.getName());
             pstmt.setInt(2, entity.getAuthor_id());
 
@@ -86,16 +90,17 @@ public class AuthorDao implements Dao<Integer, Author> {
     }
 
     @Override
-    public void delete(Integer id) {
+    public boolean delete(Integer id) {
         String sql = "DELETE FROM authors "
                 + "WHERE author_id = ? "
-                + "AND NOT EXISTS("
+                + "AND NOT EXISTS ("
                 + "SELECT 1 "
-                + "FROM books"
-                + "WHERE author_id = ?)";
+                + "FROM books "
+                + "WHERE author_id = ? )";
 
-        try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);) {
-
+        try {
+            Connection conn = DatabaseConnection.getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, id);
             pstmt.setInt(2, id);
 
@@ -103,14 +108,16 @@ public class AuthorDao implements Dao<Integer, Author> {
 
             if (rowsAffected > 0) {
                 JOptionPane.showMessageDialog(null, "Autor deletado com sucesso!");
+                return true;
             } else {
                 JOptionPane.showMessageDialog(null, "Não foi possível deletar o autor, pois o mesmo possui livros associados!");
+                return false;
             }
 
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
+        return false;
     }
 
     @Override

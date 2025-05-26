@@ -82,7 +82,7 @@ public class BookDao implements Dao<Integer, Book> {
     public void update(Book entity) {
         String sql = "UPDATE books "
                 + "SET name = ?, pages = ?, author_id = ? "
-                + "WHERE = book_id = ?";
+                + "WHERE book_id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql);) {
             pstmt.setString(1, entity.getName());
@@ -98,7 +98,7 @@ public class BookDao implements Dao<Integer, Book> {
     }
 
     @Override
-    public void delete(Integer id) {
+    public boolean delete(Integer id) {
         String sql = "DELETE FROM books "
                 + "WHERE book_id = ?";
 
@@ -109,14 +109,15 @@ public class BookDao implements Dao<Integer, Book> {
 
             if (rowsAffected > 0) {
                 JOptionPane.showMessageDialog(null, "Autor deletado com sucesso!");
+                return true;
             } else {
-                JOptionPane.showMessageDialog(null, "Não foi possível deletar o autor, pois o mesmo possui livros associados!");
+                return false;
             }
 
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-
+        return false;
     }
 
     @Override
